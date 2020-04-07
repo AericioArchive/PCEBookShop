@@ -1,0 +1,20 @@
+name: PCEBookShop
+main: Aericio\PCEBookShop\PCEBookShop
+version: 1.0.0
+api: 3.11.2
+load: POSTWORLD
+author: Aericio
+depend: [PiggyCustomEnchants]
+website: "https://github.com/Aericio/PCEBookShop/"
+permissions:
+  pcebookshop:
+    default: op
+    description: "Allows usage of all PCEBookShop features"
+    children:
+      pcebookshop.command:
+        default: op
+        description: "Allows usage of all PCEBookShop commands"
+        children:
+          pcebookshop.command.bookshop:
+            default: true
+            description: "Allows usage of the /pcebookshop command"

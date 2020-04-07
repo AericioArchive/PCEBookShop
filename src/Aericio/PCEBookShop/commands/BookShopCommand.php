@@ -47,7 +47,7 @@ class BookShopCommand extends BaseCommand
                         if ($data) {
                             $economyProvider = $this->plugin->getEconomyProvider();
                             if ($economyProvider->getMoney($player) < $cost) {
-                                $player->sendMessage(TextFormat::RED . "Insufficient funds. You need $" . ($cost - $economyProvider->getMoney($player)) . " more.");
+                                $player->sendMessage(TextFormat::RED . "Insufficient funds. You need " . $economyProvider->getMonetaryUnit() . ($cost - $economyProvider->getMoney($player)) . " more.");
                                 return;
                             }
                             $item = Item::get(Item::BOOK);
@@ -57,7 +57,9 @@ class BookShopCommand extends BaseCommand
                             if ($player->getInventory()->canAddItem($item)) {
                                 $economyProvider->takeMoney($player, $cost);
                                 $player->getInventory()->addItem($item);
+                                return;
                             }
+                            $player->sendMessage(TextFormat::RED . "Purchase cancelled. Your inventory is full.");
                         } else {
                             $this->sendShopForm($player);
                         }
@@ -74,7 +76,7 @@ class BookShopCommand extends BaseCommand
         $form->setTitle(TextFormat::GREEN . "PCEBookShop - Menu");
         foreach (Utils::RARITY_NAMES as $rarity => $name) {
             $cost = $this->plugin->getConfig()->getNested('cost.' . strtolower($name));
-            $form->addButton(Utils::getColorFromRarity($rarity) . $name . TextFormat::EOL . TextFormat::RESET . "Cost: $" . $cost);
+            $form->addButton(Utils::getColorFromRarity($rarity) . $name . TextFormat::EOL . TextFormat::RESET . "Cost: " . $this->plugin->getEconomyProvider()->getMonetaryUnit() . $cost);
         }
         $player->sendForm($form);
         return;

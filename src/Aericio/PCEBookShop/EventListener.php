@@ -24,15 +24,23 @@ class EventListener implements Listener
     public function onPlayerInteractEvent(PlayerInteractEvent $event): void
     {
         $item = $event->getItem();
-        if ($item->getId() !== Item::BOOK && !$item->getNamedTag()->hasTag("pcebookshop")) return;
-        $nbt = $item->getNamedTag()->getInt("pcebookshop");
-        $enchants = $this->plugin->getEnchantmentsByRarity($nbt);
-        $enchant = $enchants[array_rand($enchants)];
-        if ($enchant instanceof Enchantment) {
-            $item = Item::get(Item::ENCHANTED_BOOK);
-            $item->setCustomName(TextFormat::RESET . TextFormat::YELLOW . "Enchanted Book" . TextFormat::RESET);
-            $item->addEnchantment(new EnchantmentInstance($enchant, $this->plugin->getRandomWeightedElement($enchant->getMaxLevel())));
-            $event->getPlayer()->getInventory()->setItemInHand($item);
+        $player = $event->getPlayer();
+        if ($item->getId() !== Item::BOOK) return;
+        if ($item->getNamedTag()->hasTag("pcebookshop")) {
+            $nbt = $item->getNamedTag()->getInt("pcebookshop");
+            $enchants = $this->plugin->getEnchantmentsByRarity($nbt);
+            $enchant = $enchants[array_rand($enchants)];
+            if ($enchant instanceof Enchantment) {
+                $item = Item::get(Item::ENCHANTED_BOOK);
+                $item->setCustomName(TextFormat::RESET . TextFormat::YELLOW . "Enchanted Book" . TextFormat::RESET);
+                $item->addEnchantment(new EnchantmentInstance($enchant, $this->plugin->getRandomWeightedElement($enchant->getMaxLevel())));
+                if ($player->getInventory()->canAddItem($item)) {
+                    $player->getInventory()->removeItem(Item::get(Item::BOOK));
+                    $player->getInventory()->addItem($item);
+                    return;
+                }
+                $player->sendMessage(TextFormat::RED . "Your inventory is full.");
+            }
         }
     }
 }

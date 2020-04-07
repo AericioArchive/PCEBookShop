@@ -2,7 +2,7 @@
 
 economy:
   # Possible Providers: economyapi, multieconomy, xp
-  provider: multieconomy
+  provider: economyapi
   # This is used for the MultiEconomy provider
   multieconomy-currency: ""
 

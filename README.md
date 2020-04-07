@@ -3,13 +3,14 @@
 PCEBookShop is an extension to the [PiggyCustomEnchants](https://github.com/DaPigGuy/PiggyCustomEnchants/) plugin which adds a custom enchants book shop.
 
 ### Quick Tip for Players
-* You can validate the authenticity of a custom enchants book (which has not been activated yet) by running `/ce nbt`
+* You can validate the authenticity of a custom enchants book (which has not been activated yet) by running `/ce nbt`.
     * Normal players are able to run this command by default.
-    * Near the bottom, you might find a line that looks similar to this: `pocketmine\nbt\tag\IntTag: name='pcebookshop', value='1'`
+    * Near the bottom, you might find a line that looks similar to this: `pocketmine\nbt\tag\IntTag: name='pcebookshop', value='1'`.
         * Value 1 = Mythic
         * Value 2 = Rare
         * Value 5 = Uncommon
         * Value 10 = Common
+    * Optionally, you can just look at the item lore.    
     * You won't be able to find this tag once the item has been activated, but rather a tag created by PiggyCustomEnchants.
 
 ## Commands

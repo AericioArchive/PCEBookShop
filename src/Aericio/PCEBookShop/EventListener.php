@@ -34,9 +34,10 @@ class EventListener implements Listener
                 $item = Item::get(Item::ENCHANTED_BOOK);
                 $item->setCustomName(TextFormat::RESET . TextFormat::YELLOW . "Enchanted Book" . TextFormat::RESET);
                 $item->addEnchantment(new EnchantmentInstance($enchant, $this->plugin->getRandomWeightedElement($enchant->getMaxLevel())));
-                if ($player->getInventory()->canAddItem($item)) {
-                    $player->getInventory()->removeItem(Item::get(Item::BOOK));
-                    $player->getInventory()->addItem($item);
+                $inventory = $player->getInventory();
+                if ($inventory->canAddItem($item)) {
+                    $inventory->removeItem($inventory->getItemInHand()->pop());
+                    $inventory->addItem($item->pop());
                     return;
                 }
                 $player->sendMessage(TextFormat::RED . "Your inventory is full.");

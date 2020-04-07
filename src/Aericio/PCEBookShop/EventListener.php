@@ -21,7 +21,7 @@ class EventListener implements Listener
         $this->plugin = $plugin;
     }
 
-    public function onPlayerInteractEvent(PlayerInteractEvent $event)
+    public function onPlayerInteractEvent(PlayerInteractEvent $event): void
     {
         $item = $event->getItem();
         if ($item->getId() !== Item::BOOK && !$item->getNamedTag()->hasTag("pcebookshop")) return;

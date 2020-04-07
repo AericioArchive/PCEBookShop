@@ -35,7 +35,7 @@ class BookShopCommand extends BaseCommand
         $this->sendShopForm($sender);
     }
 
-    public function sendShopForm(Player $player)
+    public function sendShopForm(Player $player): void
     {
         $form = new SimpleForm(function (Player $player, ?int $data): void {
             if ($data !== null) {

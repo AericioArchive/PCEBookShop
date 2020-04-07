@@ -1,0 +1,10 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/Aericio/PCEBookShop
+build-by-default: true
+branches:
+- master
+projects:
+  PCEBookShop:
+    path: ""
+    lint:
+      phpstan: false
+...

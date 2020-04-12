@@ -62,8 +62,8 @@ class PCEBookShop extends PluginBase
     public function getRandomWeightedElement(int $max): ?int
     {
         $weightedValues = [];
-        for ($i = 1; $i <= $max; $i++) $weightedValues[] = $i;
-        $rand = mt_rand(1, (int)array_sum($weightedValues));
+        for ($i = 0; $i <= $max; $i++) $weightedValues[] = $i;
+        $rand = mt_rand(1, (int) array_sum($weightedValues));
         foreach ($weightedValues as $key => $value) {
             $rand -= $value;
             if ($rand <= 0) return $key;

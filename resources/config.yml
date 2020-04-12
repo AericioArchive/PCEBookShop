@@ -11,3 +11,6 @@ cost:
   uncommon: 2500
   rare: 5000
   mythic: 10000
+
+excluded-enchants:
+  - "placeholder"

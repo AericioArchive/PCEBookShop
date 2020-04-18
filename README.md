@@ -13,6 +13,11 @@ PCEBookShop is an extension to the [PiggyCustomEnchants](https://github.com/DaPi
     * Optionally, you can just look at the item lore.    
     * You won't be able to find this tag once the item has been activated, but rather a tag created by PiggyCustomEnchants.
 
+## Supported Economy Types
+  * [EconomyAPI](https://github.com/onebone/EconomyS/tree/3.x/EconomyAPI) by onebone
+  * [MultiEconomy](https://github.com/TwistedAsylumMC/MultiEconomy) by TwistedAsylumMC
+  * PMMP Player EXP
+
 ## Commands
 | Command | Description | Permissions | Aliases |
 | --- | --- | --- | --- |
@@ -25,7 +30,7 @@ PCEBookShop is an extension to the [PiggyCustomEnchants](https://github.com/DaPi
 | `pcebookshop.command` | Allow usage of all PCEBookShop commands | `op` |
 | `pcebookshop.command.bookshop` | Allow usage of the /pcebookshop command | `true` |
 
-### License
+## License
 ```
     PCEBookShop for PiggyCustomEnchants.
     Copyright (C) 2020  Aericio

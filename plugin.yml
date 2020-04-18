@@ -5,6 +5,7 @@ api: 3.11.2
 load: POSTWORLD
 author: Aericio
 depend: [PiggyCustomEnchants]
+soft-depend: [EconomyAPI, MultiEconomy]
 website: "https://github.com/Aericio/PCEBookShop/"
 permissions:
   pcebookshop:

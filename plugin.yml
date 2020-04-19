@@ -1,6 +1,6 @@
 name: PCEBookShop
 main: Aericio\PCEBookShop\PCEBookShop
-version: 1.0.0
+version: 1.0.1
 api: 3.11.2
 load: POSTWORLD
 author: Aericio

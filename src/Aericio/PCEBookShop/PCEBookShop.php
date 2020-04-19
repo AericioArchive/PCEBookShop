@@ -57,17 +57,10 @@ class PCEBookShop extends PluginBase
     }
 
     /**
-     * Adapted from https://stackoverflow.com/a/11872928
+     * Adapted from https://stackoverflow.com/a/445363
      */
-    public function getRandomWeightedElement(int $max): ?int
+    public function getRandomWeightedElement(int $max): int
     {
-        $weightedValues = [];
-        for ($i = 0; $i <= $max; $i++) $weightedValues[] = $i;
-        $rand = mt_rand(1, (int) array_sum($weightedValues));
-        foreach ($weightedValues as $key => $value) {
-            $rand -= $value;
-            if ($rand <= 0) return $key;
-        }
-        return null;
+        return intval(floor(1 + pow(lcg_value(), $this->getConfig()->getNested('chance.gamma', 1.5)) * $max));
     }
 }

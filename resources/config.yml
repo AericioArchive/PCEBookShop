@@ -7,10 +7,16 @@ economy:
   multieconomy-currency: ""
 
 cost:
+  # If you are using xp provider, 1 = 1 level.
   common: 1000
   uncommon: 2500
   rare: 5000
   mythic: 10000
+
+chance:
+  # Gamma for weighting levels. Higher gamma = lower change of high-level books.
+  # Tests: https://gist.github.com/Aericio/856c9b54f98af2164ce8600c5be3eb17
+  gamma: 1.5
 
 excluded-enchants:
   - "placeholder"

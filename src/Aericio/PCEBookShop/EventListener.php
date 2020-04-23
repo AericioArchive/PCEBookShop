@@ -27,6 +27,7 @@ class EventListener implements Listener
         $player = $event->getPlayer();
         if ($item->getId() !== Item::BOOK) return;
         if ($item->getNamedTag()->hasTag("pcebookshop")) {
+            $event->setCancelled();
             $nbt = $item->getNamedTag()->getInt("pcebookshop");
             $enchants = $this->plugin->getEnchantmentsByRarity($nbt);
             $enchant = $enchants[array_rand($enchants)];

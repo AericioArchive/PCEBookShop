@@ -1,0 +1,15 @@
+command:
+  use-in-game: "{RED}Command must be used in-game."
+  insufficient-funds: "{RED}Insufficient funds. You need ${AMOUNT} more."
+  inventory-full: "{RED}Your inventory is full."
+item:
+  unused-name: "{YELLOW}Enchanted Book"
+  name: "{COLOR_RARITY}{ENCHANTMENT} Custom Enchants Book"
+  lore: "Tap the ground to get a random custom enchantment."
+menu:
+  title: "{GREEN}PCEBookShop - Menu"
+  button: "{RARITY_COLOR}{ENCHANTMENT}{NEWLINE}{RESET}Cost: ${AMOUNT}"
+  confirmation:
+    title: "{GREEN}PCEBookShop - Purchase Confirmation"
+    content: "Are you sure you want to purchase {RARITY_COLOR}{ENCHANTMENT} Custom Enchant Book for ${AMOUNT}?"
+    inventory-full: "{RED}Purchase cancelled. Your inventory is full."

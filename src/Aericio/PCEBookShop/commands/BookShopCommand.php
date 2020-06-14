@@ -6,37 +6,23 @@ namespace Aericio\PCEBookShop\commands;
 
 use Aericio\PCEBookShop\PCEBookShop;
 use CortexPE\Commando\BaseCommand;
-use CortexPE\Commando\exception\ArgumentOrderException;
 use DaPigGuy\PiggyCustomEnchants\utils\Utils;
 use jojoe77777\FormAPI\ModalForm;
 use jojoe77777\FormAPI\SimpleForm;
 use pocketmine\command\CommandSender;
-use pocketmine\command\PluginIdentifiableCommand;
 use pocketmine\item\Item;
 use pocketmine\Player;
-use pocketmine\plugin\Plugin;
 use pocketmine\utils\TextFormat;
 
-class BookShopCommand extends BaseCommand implements PluginIdentifiableCommand
+class BookShopCommand extends BaseCommand
 {
     /** @var PCEBookShop */
-    private $plugin;
-
-    public function __construct(PCEBookShop $plugin, string $name, string $description = "", array $aliases = [])
-    {
-        $this->plugin = $plugin;
-        parent::__construct($name, $description, $aliases);
-    }
-
-    public function getPlugin(): Plugin
-    {
-        return $this->plugin;
-    }
+    protected $plugin;
 
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
     {
         if (!$sender instanceof Player) {
-            $sender->sendMessage(TextFormat::RED . "Command must be used in-game.");
+            $sender->sendMessage($this->plugin->getMessage("command.use-in-game"));
             return;
         }
         $this->sendShopForm($sender);
@@ -48,18 +34,18 @@ class BookShopCommand extends BaseCommand implements PluginIdentifiableCommand
             if ($data !== null) {
                 $type = array_keys(Utils::RARITY_NAMES)[$data];
                 $name = Utils::RARITY_NAMES[$type];
-                $cost = $this->plugin->getConfig()->getNested('cost.' . strtolower($name));
+                $cost = $this->plugin->getConfig()->getNested("cost." . strtolower($name));
                 $form = new ModalForm(function (Player $player, ?bool $data) use ($cost, $name, $type): void {
                     if ($data !== null) {
                         if ($data) {
                             $economyProvider = $this->plugin->getEconomyProvider();
                             if ($economyProvider->getMoney($player) < $cost) {
-                                $player->sendMessage(TextFormat::RED . "Insufficient funds. You need " . $economyProvider->getMonetaryUnit() . ($cost - $economyProvider->getMoney($player)) . " more.");
+                                $player->sendMessage($this->plugin->getMessage("command.insufficient-funds", ["{AMOUNT}" => round($cost - $economyProvider->getMoney($player), 2, PHP_ROUND_HALF_DOWN)]));
                                 return;
                             }
                             $item = Item::get(Item::BOOK);
-                            $item->setCustomName(TextFormat::RESET . Utils::getColorFromRarity($type) . $name . " Custom Enchants Book" . TextFormat::RESET);
-                            $item->setLore(["Tap the ground to get a random custom enchantment."]);
+                            $item->setCustomName(TextFormat::RESET . $this->plugin->getMessage("item.name", ["{COLOR_RARITY}" => Utils::getColorFromRarity($type), "{ENCHANTMENT}" => $name]) . TextFormat::RESET);
+                            $item->setLore([$this->plugin->getMessage("item.lore")]);
                             $item->getNamedTag()->setInt("pcebookshop", $type);
                             $inventory = $player->getInventory();
                             if ($inventory->canAddItem($item)) {
@@ -67,32 +53,29 @@ class BookShopCommand extends BaseCommand implements PluginIdentifiableCommand
                                 $inventory->addItem($item);
                                 return;
                             }
-                            $player->sendMessage(TextFormat::RED . "Purchase cancelled. Your inventory is full.");
+                            $player->sendMessage($this->plugin->getMessage("menu.confirmation.inventory-full"));
                         } else {
                             $this->sendShopForm($player);
                         }
                     }
                 });
-                $form->setTitle(TextFormat::GREEN . "PCEBookShop - Purchase Confirmation");
-                $form->setContent("Are you sure you want to purchase " . Utils::getColorFromRarity($type) . $name . " Custom Enchants Book" . TextFormat::RESET . " for $" . $cost . "?");
+                $form->setTitle($this->plugin->getMessage("menu.confirmation.title"));
+                $form->setContent($this->plugin->getMessage("menu.confirmation.content", ["{RARITY_COLOR}" => Utils::getColorFromRarity($type), "{ENCHANTMENT}" => $name, "{AMOUNT}" => round($cost, 2, PHP_ROUND_HALF_DOWN)]));
                 $form->setButton1("Yes");
                 $form->setButton2("No");
                 $player->sendForm($form);
                 return;
             }
         });
-        $form->setTitle(TextFormat::GREEN . "PCEBookShop - Menu");
+        $form->setTitle($this->plugin->getMessage("menu.title"));
         foreach (Utils::RARITY_NAMES as $rarity => $name) {
             $cost = $this->plugin->getConfig()->getNested('cost.' . strtolower($name));
-            $form->addButton(Utils::getColorFromRarity($rarity) . $name . TextFormat::EOL . TextFormat::RESET . "Cost: " . $this->plugin->getEconomyProvider()->getMonetaryUnit() . $cost);
+            $form->addButton($this->plugin->getMessage("menu.button", ["{RARITY_COLOR}" => Utils::getColorFromRarity($rarity), "{ENCHANTMENT}" => $name, "{AMOUNT}" => round($cost, 2, PHP_ROUND_HALF_DOWN)]));
         }
         $player->sendForm($form);
         return;
     }
 
-    /**
-     * @throws ArgumentOrderException
-     */
     protected function prepare(): void
     {
         $this->setPermission("pcebookshop.command.bookshop");

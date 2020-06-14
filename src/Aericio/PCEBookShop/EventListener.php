@@ -33,7 +33,7 @@ class EventListener implements Listener
             $enchant = $enchants[array_rand($enchants)];
             if ($enchant instanceof Enchantment) {
                 $item = Item::get(Item::ENCHANTED_BOOK);
-                $item->setCustomName(TextFormat::RESET . TextFormat::YELLOW . "Enchanted Book" . TextFormat::RESET);
+                $item->setCustomName(TextFormat::RESET . $this->plugin->getMessage("item.unused-name") . TextFormat::RESET);
                 $item->addEnchantment(new EnchantmentInstance($enchant, $this->plugin->getRandomWeightedElement($enchant->getMaxLevel())));
                 $inventory = $player->getInventory();
                 if ($inventory->canAddItem($item)) {
@@ -41,7 +41,7 @@ class EventListener implements Listener
                     $inventory->addItem($item->pop());
                     return;
                 }
-                $player->sendMessage(TextFormat::RED . "Your inventory is full.");
+                $player->sendMessage($this->plugin->getMessage("inventory-full"));
             }
         }
     }

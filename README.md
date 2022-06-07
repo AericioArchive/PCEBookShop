@@ -1,4 +1,4 @@
-# PCEBookShop [![Poggit-CI](https://poggit.pmmp.io/shield.dl/PCEBookShop)](https://poggit.pmmp.io/p/PCEBookShop) [![Discord](https://img.shields.io/discord/330850307607363585?logo=discord)](https://discord.gg/qmnDsSD)
+# PCEBookShop PM4 [![Poggit-CI](https://poggit.pmmp.io/shield.dl/PCEBookShop)](https://poggit.pmmp.io/p/PCEBookShop) [![Discord](https://img.shields.io/discord/330850307607363585?logo=discord)](https://discord.gg/qmnDsSD)
 
 PCEBookShop is an extension to the [PiggyCustomEnchants](https://github.com/DaPigGuy/PiggyCustomEnchants/) plugin which adds a custom enchants book shop.
 
@@ -14,9 +14,8 @@ PCEBookShop is an extension to the [PiggyCustomEnchants](https://github.com/DaPi
     * You won't be able to find this tag once the item has been activated, but rather a tag created by PiggyCustomEnchants.
 
 ## Supported Economy Types
-  * [EconomyAPI](https://github.com/onebone/EconomyS/tree/3.x/EconomyAPI) by onebone
-  * [MultiEconomy](https://github.com/TwistedAsylumMC/MultiEconomy) by TwistedAsylumMC
   * PMMP Player EXP
+  * SUPPORT FOR ECONOMYAPI AND BEDROCKECONOMY SOON.
 
 ## Commands
 | Command | Description | Permissions | Aliases |

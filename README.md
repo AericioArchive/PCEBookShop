@@ -22,6 +22,13 @@ PCEBookShop is an extension to the [PiggyCustomEnchants](https://github.com/DaPi
 | --- | --- | --- | --- |
 | `/pcebookshop` | Opens the PCEBookShop Menu | `pcebookshop.command.bookshop` | `/bookshop, /bs` |
 
+## Requirements
+| Virions |
+| --- |
+| `Commando` |
+| `LibPiggyEconomy` |
+| `FormAPI` |
+
 ## Permissions
 | Permissions | Description | Default |
 | --- | --- | --- |

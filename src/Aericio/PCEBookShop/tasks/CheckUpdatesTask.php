@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Aericio\PCEBookShop\tasks;
 
+use Aericio\PCEBookShop\PCEBookShop;
 use Exception;
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;
+use pocketmine\plugin\ApiVersion;
 use pocketmine\utils\Internet;
 
 class CheckUpdatesTask extends AsyncTask
@@ -16,26 +18,24 @@ class CheckUpdatesTask extends AsyncTask
         $this->setResult([Internet::getURL("https://poggit.pmmp.io/releases.json?name=PCEBookShop", 10, [], $error), $error]);
     }
 
-    public function onCompletion(Server $server): void
+    public function onCompletion(): void
     {
-        $plugin = $server->getPluginManager()->getPlugin("PCEBookShop");
-        try {
-            if ($plugin->isEnabled()) {
-                $results = $this->getResult();
-
-                $error = $results[1];
-                if ($error !== null) throw new Exception($error);
-
-                $data = json_decode($results[0], true);
-                if (version_compare($plugin->getDescription()->getVersion(), $data[0]["version"]) === -1) {
-                    if ($server->getPluginManager()->isCompatibleApi($data[0]["api"][0]["from"])) {
-                        $plugin->getLogger()->info("PCEBookShop v" . $data[0]["version"] . " is available for download at " . $data[0]["artifact_url"] . "/PCEBookShop.phar");
+        $plugin = Server::getInstance()->getPluginManager()->getPlugin("PCEBookShop");
+        $logger = Server::getInstance()->getLogger();
+        [$body, $error] = $this->getResult();
+        if ($error) {
+            $logger->warning("Auto-update check failed.");
+            $logger->debug($error);
+        } else {
+            $versions = json_decode($body, true);
+            if ($versions) foreach ($versions as $version) {
+                if (version_compare($plugin->getDescription()->getVersion(), $version["version"]) === -1) {
+                    if (ApiVersion::isCompatible(Server::getInstance()->getApiVersion(), $version["api"][0])) {
+                        $logger->notice("PCEBookShop v" . $version["version"] . " is available for download at " . $version["artifact_url"] . "/PCEBookShop.phar");
+                        break;
                     }
                 }
             }
-        } catch (Exception $exception) {
-            $plugin->getLogger()->warning("Auto-update check failed.");
-            $plugin->getLogger()->debug((string)$exception);
         }
     }
 }

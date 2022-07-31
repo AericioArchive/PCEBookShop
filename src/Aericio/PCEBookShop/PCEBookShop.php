@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Aericio\PCEBookShop;
 
 use Aericio\PCEBookShop\commands\BookShopCommand;
-use Aericio\PCEBookShop\tasks\CheckUpdatesTask;
 use Aericio\PCEBookShop\utils\Utils;
 use CortexPE\Commando\exception\HookAlreadyRegistered;
 use CortexPE\Commando\PacketHooker;
@@ -16,17 +15,14 @@ use DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
 use DaPigGuy\PiggyCustomEnchants\CustomEnchantManager;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
+use pocketmine\utils\SingletonTrait;
 
 class PCEBookShop extends PluginBase
 {
-    /** @var Config */
-    private $messages;
-
-    /** @var EconomyProvider */
-    public $economyProvider;
-
-    /** @var array */
-    public $enchantments = [];
+    private Config $messages;
+    public EconomyProvider $economyProvider;
+    public array $enchantments = [];
+    use SingletonTrait;
 
     /**
      * @throws HookAlreadyRegistered
@@ -35,6 +31,7 @@ class PCEBookShop extends PluginBase
      */
     public function onEnable(): void
     {
+        self::setInstance($this);
         $this->saveResource("messages.yml");
         $this->messages = new Config($this->getDataFolder() . "messages.yml");
         $this->saveDefaultConfig();
@@ -46,8 +43,6 @@ class PCEBookShop extends PluginBase
 
         if (!PacketHooker::isRegistered()) PacketHooker::register($this);
         $this->getServer()->getCommandMap()->register("pcebookshop", new BookShopCommand($this, "pcebookshop", "Opens the PiggyCustomEnchants Book Shop Menu", ["bookshop", "bs"]));
-
-        $this->getServer()->getAsyncPool()->submitTask(new CheckUpdatesTask());
 
         foreach (CustomEnchantManager::getEnchantments() as $enchants) {
             $excluded = $this->getConfig()->get("excluded-enchants", []);

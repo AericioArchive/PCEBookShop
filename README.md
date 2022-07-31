@@ -16,6 +16,7 @@ PCEBookShop is an extension to the [PiggyCustomEnchants](https://github.com/DaPi
 ## Supported Economy Types
   * [EconomyAPI](https://github.com/onebone/EconomyS/tree/3.x/EconomyAPI) by onebone
   * [MultiEconomy](https://github.com/TwistedAsylumMC/MultiEconomy) by TwistedAsylumMC
+  * [BedrockEconomy](https://github.com/cooldogedev/BedrockEconomy) by cooldogedev
   * PMMP Player EXP
 
 ## Commands
@@ -26,8 +27,6 @@ PCEBookShop is an extension to the [PiggyCustomEnchants](https://github.com/DaPi
 ## Permissions
 | Permissions | Description | Default |
 | --- | --- | --- |
-| `pcebookshop` | Allows usage of all PCEBookShop features | `op` |
-| `pcebookshop.command` | Allow usage of all PCEBookShop commands | `op` |
 | `pcebookshop.command.bookshop` | Allow usage of the /pcebookshop command | `true` |
 
 ## License

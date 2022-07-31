@@ -11,13 +11,13 @@ use jojoe77777\FormAPI\ModalForm;
 use jojoe77777\FormAPI\SimpleForm;
 use pocketmine\command\CommandSender;
 use pocketmine\item\Item;
-use pocketmine\Player;
+use pocketmine\item\VanillaItems;
+use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
 
 class BookShopCommand extends BaseCommand
 {
-    /** @var PCEBookShop */
-    protected $plugin;
+    protected PCEBookShop $plugin;
 
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
     {
@@ -30,6 +30,7 @@ class BookShopCommand extends BaseCommand
 
     public function sendShopForm(Player $player): void
     {
+        $this->plugin = PCEBookShop::getInstance();
         $form = new SimpleForm(function (Player $player, ?int $data): void {
             if ($data !== null) {
                 $type = array_keys(Utils::RARITY_NAMES)[$data];
@@ -39,18 +40,19 @@ class BookShopCommand extends BaseCommand
                     if ($data !== null) {
                         if ($data) {
                             $economyProvider = $this->plugin->getEconomyProvider();
-                            if ($economyProvider->getMoney($player) < $cost) {
-                                $player->sendMessage($this->plugin->getMessage("command.insufficient-funds", ["{AMOUNT}" => round($cost - $economyProvider->getMoney($player), 2, PHP_ROUND_HALF_DOWN)]));
-                                return;
-                            }
-                            $item = Item::get(Item::BOOK);
+                            $item = VanillaItems::BOOK();
                             $item->setCustomName(TextFormat::RESET . $this->plugin->getMessage("item.name", ["{COLOR_RARITY}" => Utils::getColorFromRarity($type), "{ENCHANTMENT}" => $name]) . TextFormat::RESET);
                             $item->setLore([$this->plugin->getMessage("item.lore")]);
                             $item->getNamedTag()->setInt("pcebookshop", $type);
                             $inventory = $player->getInventory();
                             if ($inventory->canAddItem($item)) {
-                                $economyProvider->takeMoney($player, $cost);
-                                $inventory->addItem($item);
+                                $this->plugin->getEconomyProvider()->takeMoney($player, $cost, function (bool $success) use ($player, $item): void {
+                                    if (!$success) {
+                                        $player->sendMessage('You do not have enough money to buy this book.');
+                                        return;
+                                    }
+                                    $player->getInventory()->addItem($item);
+                                });
                                 return;
                             }
                             $player->sendMessage($this->plugin->getMessage("menu.confirmation.inventory-full"));
@@ -64,7 +66,6 @@ class BookShopCommand extends BaseCommand
                 $form->setButton1("Yes");
                 $form->setButton2("No");
                 $player->sendForm($form);
-                return;
             }
         });
         $form->setTitle($this->plugin->getMessage("menu.title"));
@@ -73,7 +74,6 @@ class BookShopCommand extends BaseCommand
             $form->addButton($this->plugin->getMessage("menu.button", ["{RARITY_COLOR}" => Utils::getColorFromRarity($rarity), "{ENCHANTMENT}" => $name, "{AMOUNT}" => round($cost, 2, PHP_ROUND_HALF_DOWN)]));
         }
         $player->sendForm($form);
-        return;
     }
 
     protected function prepare(): void
